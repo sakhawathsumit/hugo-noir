@@ -6,44 +6,6 @@
         body {
             font-family: 'Space Grotesk', sans-serif;
         }
-        .language-switcher {
-            position: relative;
-            display: inline-block;
-        }
-        .language-switcher-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-            cursor: pointer;
-        }
-        .language-dropdown {
-            display: none;
-            position: absolute;
-            background-color: var(--bg-secondary);
-            min-width: 120px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            z-index: 1;
-            border-radius: 0.5rem;
-            overflow: hidden;
-        }
-        .language-switcher:hover .language-dropdown {
-            display: block;
-        }
-        .language-dropdown a {
-            padding: 0.75rem 1rem;
-            display: block;
-            text-decoration: none;
-            transition: background-color 0.2s;
-        }
-        .language-dropdown a:hover {
-            background-color: rgba(0,0,0,0.05);
-        }
-        .dark .language-dropdown a:hover {
-            background-color: rgba(255,255,255,0.05);
-        }
-        .language-active {
-            font-weight: 600;
-        }
     </style>
 </head>
 <header class="py-6 relative">
@@ -71,33 +33,6 @@
                 {{ end }}
             </nav>
             <div class="hidden md:flex justify-end items-center">
-                <div class="flex items-center">
-                    <span class="text-lg text-text-secondary-light dark:text-text-secondary-dark mr-2">{{ T "localTimeLabel" }}</span>
-                    <div id="local-time" class="text-lg text-text-secondary-light dark:text-text-secondary-dark"></div>
-                </div>
-                <!-- Language Switcher - Desktop -->
-                <div class="language-switcher ml-4">
-                    <div class="language-switcher-btn text-lg text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-colors duration-300 p-2 rounded-md">
-                        {{ .Language.Lang | upper }}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="m6 9 6 6 6-6"/>
-                        </svg>
-                    </div>
-                    <div class="language-dropdown">
-                        {{ range .Site.Languages }}
-                            {{ $translation := "" }}
-                            {{ $foundTranslations := where $.Page.Translations "Lang" .Lang }}
-                            {{ if $foundTranslations }}
-                                {{ $translation = index $foundTranslations 0 }}
-                            {{ end }}
-                            {{ $isCurrentLang := eq .Lang $.Language.Lang }}
-                            <a href="{{ if $translation }}{{ $translation.Permalink }}{{ else }}{{ .Lang | absLangURL }}{{ end }}" 
-                               class="{{ if $isCurrentLang }}language-active{{ end }} text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-colors duration-300">
-                                {{ .LanguageName }}
-                            </a>
-                        {{ end }}
-                    </div>
-                </div>
                 <button id="theme-toggle-button-desktop" class="ml-4 inline-block text-lg text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-colors duration-300 p-2 rounded-md">
                   <svg id="theme-toggle-dark-icon-desktop" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
                     <path d="M21.7519 15.0021C20.597 15.484 19.3296 15.7501 18 15.7501C12.6152 15.7501 8.25 11.3849 8.25 6.00011C8.25 4.67052 8.51614 3.40308 8.99806 2.24817C5.47566 3.71798 3 7.19493 3 11.2501C3 16.6349 7.36522 21.0001 12.75 21.0001C16.8052 21.0001 20.2821 18.5245 21.7519 15.0021Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -116,29 +51,6 @@
             <div class="flex justify-between items-center p-6">
                 <span class="text-xl font-bold text-text-primary-light dark:text-text-primary-dark">{{ T "menuTitle" }}</span>
                 <div class="flex items-center gap-4">
-                    <!-- Language Switcher - Mobile -->
-                    <div class="language-switcher">
-                        <div class="language-switcher-btn text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-colors duration-300 flex items-center p-2 rounded-md">
-                            {{ .Language.Lang | upper }}
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="m6 9 6 6 6-6"/>
-                            </svg>
-                        </div>
-                        <div class="language-dropdown">
-                            {{ range .Site.Languages }}
-                                {{ $translation := "" }}
-                                {{ $foundTranslationsMobile := where $.Page.Translations "Lang" .Lang }}
-                                {{ if $foundTranslationsMobile }}
-                                    {{ $translation = index $foundTranslationsMobile 0 }}
-                                {{ end }}
-                                {{ $isCurrentLang := eq .Lang $.Language.Lang }}
-                                <a href="{{ if $translation }}{{ $translation.Permalink }}{{ else }}{{ .Lang | absLangURL }}{{ end }}" 
-                                   class="{{ if $isCurrentLang }}language-active{{ end }} text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-colors duration-300">
-                                    {{ .LanguageName }}
-                                </a>
-                            {{ end }}
-                        </div>
-                    </div>
                     <button id="theme-toggle-button-mobile" class="text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-colors duration-300 flex items-center p-2 rounded-md">
                       <svg id="theme-toggle-dark-icon-mobile" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
                         <path d="M21.7519 15.0021C20.597 15.484 19.3296 15.7501 18 15.7501C12.6152 15.7501 8.25 11.3849 8.25 6.00011C8.25 4.67052 8.51614 3.40308 8.99806 2.24817C5.47566 3.71798 3 7.19493 3 11.2501C3 16.6349 7.36522 21.0001 12.75 21.0001C16.8052 21.0001 20.2821 18.5245 21.7519 15.0021Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -159,31 +71,11 @@
                 <a href="{{ .URL | absURL }}" class="text-xl text-text-secondary-light dark:text-text-secondary-dark hover:text-text-primary-light dark:hover:text-text-primary-dark transition-colors duration-300 {{ if or ($.Page.IsMenuCurrent "main" .) ($.Page.HasMenuCurrent "main" .) }}text-accent-light dark:text-accent-dark font-semibold{{ end }}" data-menu-link>{{ .Name }}</a>
                 {{ end }}
             </nav>
-            <div class="mt-auto p-6">
-                <div class="flex items-center justify-center">
-                    <span class="text-lg text-text-secondary-light dark:text-text-secondary-dark mr-2">{{ T "localTimeLabel" }}</span>
-                    <div id="mobile-local-time" class="text-lg text-text-secondary-light dark:text-text-secondary-dark"></div>
-                </div>
-            </div>
         </div>
     </div>
 </header>
 
 <script>
-    // Time display function
-    function updateLocalTime() {
-        const timeElements = document.querySelectorAll('#local-time, #mobile-local-time');
-        timeElements.forEach(element => {
-            if (element) {
-                const now = new Date();
-                const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                element.textContent = timeString;
-            }
-        });
-    }
-    updateLocalTime();
-    setInterval(updateLocalTime, 1000);
-
     // Mobile menu functionality
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const mobileMenuClose = document.getElementById('mobile-menu-close');
